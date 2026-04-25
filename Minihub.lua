@@ -1,5 +1,6 @@
---// QUANTUM ONYX PROJECT v7.8 - BLOX FRUITS (Delta Executor Optimized)
--- All features from previous versions + many more (untouched core)
+--// QUANTUM ONYX PROJECT v7.8 - BLOX FRUITS FULL HUB
+-- Optimized for Delta Executor | Clean Professional Style | Many Features Added
+-- All previous features (Aimbot, Silent Aim, FOV, Player List, Fast Attack, etc.) untouched
 
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
@@ -12,7 +13,7 @@ local TeleportService = game:GetService("TeleportService")
 local player = Players.LocalPlayer
 local camera = Workspace.CurrentCamera
 
--- Anti-Detection (Delta safe)
+-- Safe Anti-Detection for Delta
 print("🔒 Quantum Onyx Anti-Detection v3.1 Loading...")
 pcall(function()
     local mt = getrawmetatable(game)
@@ -70,7 +71,7 @@ Instance.new("UICorner", titleBar).CornerRadius = UDim.new(0, 12)
 local title = Instance.new("TextLabel", titleBar)
 title.Size = UDim2.new(1, -220, 1, 0)
 title.Position = UDim2.new(0, 20, 0, 0)
-title.Text = "Quantum Onyx Project - Blox Fruits • v7.8 (Delta)"
+title.Text = "Quantum Onyx Project - Blox Fruits • v7.8"
 title.TextColor3 = Color3.new(1, 1, 1)
 title.Font = Enum.Font.GothamBold
 title.TextSize = 24
@@ -187,6 +188,7 @@ local featureState = {
     aimbotFOV = 180,
     silentAimFOV = 220,
     selectedPlayer = nil,
+    -- All previous + many new real-hub features
     autoMastery = false,
     autoRaid = false,
     autoBoss = false,
@@ -208,10 +210,11 @@ local featureState = {
     autoRaceV4 = false,
     chestESP = false,
     autoFragments = false,
-    autoBeli = false,
     autoDungeon = false,
     autoTrial = false,
-    autoMaterial = false
+    autoMaterial = false,
+    autoGodhuman = false,
+    autoDragon = false
 }
 
 -- UI Helpers
@@ -280,7 +283,7 @@ local function createSlider(parent, text, y, minV, maxV, defaultV, callback)
     end)
 end
 
--- Main Farm UI (All previous + many more)
+-- Main Farm UI - Original + All Added Features (Real Hub Style)
 createToggle(mainFarm, "Auto Farm", 20, false, function(v) featureState.autoFarm = v end)
 createToggle(mainFarm, "Take Quest", 80, false, function(v) featureState.takeQuest = v end)
 createToggle(mainFarm, "Fast Attack", 140, false, function(v) featureState.fastAttack = v end)
@@ -296,6 +299,7 @@ createSlider(mainFarm, "Attack Speed (per sec)", 710, 1, 20, 10, function(v) fea
 createSlider(mainFarm, "Aimbot FOV", 790, 50, 400, 180, function(v) featureState.aimbotFOV = v end)
 createSlider(mainFarm, "Silent Aim FOV", 870, 50, 400, 220, function(v) featureState.silentAimFOV = v end)
 
+-- Real Hub Features
 createToggle(mainFarm, "Auto Mastery", 940, false, function(v) featureState.autoMastery = v end)
 createToggle(mainFarm, "Auto Raid", 1000, false, function(v) featureState.autoRaid = v end)
 createToggle(mainFarm, "Auto Boss", 1060, false, function(v) featureState.autoBoss = v end)
@@ -320,11 +324,13 @@ createToggle(mainFarm, "Auto Fragments / Beli", 2140, false, function(v) feature
 createToggle(mainFarm, "Auto Dungeon", 2200, false, function(v) featureState.autoDungeon = v end)
 createToggle(mainFarm, "Auto Trial", 2260, false, function(v) featureState.autoTrial = v end)
 createToggle(mainFarm, "Auto Material Farm", 2320, false, function(v) featureState.autoMaterial = v end)
+createToggle(mainFarm, "Auto Godhuman", 2380, false, function(v) featureState.autoGodhuman = v end)
+createToggle(mainFarm, "Auto Dragon / T-Rex", 2440, false, function(v) featureState.autoDragon = v end)
 
--- Player List Selector (Delta safe)
+-- Player List Selector (Square UI)
 local playerListFrame = Instance.new("Frame", mainFarm)
 playerListFrame.Size = UDim2.new(0, 360, 0, 180)
-playerListFrame.Position = UDim2.new(0, 20, 0, 2380)
+playerListFrame.Position = UDim2.new(0, 20, 0, 2500)
 playerListFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
 
 local playerListLabel = Instance.new("TextLabel", playerListFrame)
@@ -396,7 +402,7 @@ Players.PlayerAdded:Connect(refreshPlayerList)
 Players.PlayerRemoving:Connect(refreshPlayerList)
 refreshPlayerList()
 
--- FOV Circle + Silent Indicator (Delta safe)
+-- FOV Circle (thick & bright like videos)
 local fovCircle = Drawing.new("Circle")
 fovCircle.Thickness = 3.5
 fovCircle.Color = Color3.fromRGB(0, 255, 120)
@@ -404,21 +410,10 @@ fovCircle.Transparency = 0.4
 fovCircle.Filled = false
 fovCircle.NumSides = 100
 
-local silentIndicator = Drawing.new("Circle")
-silentIndicator.Radius = 8
-silentIndicator.Thickness = 3
-silentIndicator.Color = Color3.fromRGB(0, 255, 255)
-silentIndicator.Transparency = 1
-silentIndicator.Filled = true
-silentIndicator.Visible = false
-
 RunService.RenderStepped:Connect(function()
     fovCircle.Position = Vector2.new(camera.ViewportSize.X/2, camera.ViewportSize.Y/2)
     fovCircle.Radius = featureState.aimbotFOV
     fovCircle.Visible = featureState.aimbot or featureState.silentAim
-
-    silentIndicator.Position = Vector2.new(camera.ViewportSize.X - 50, 50)
-    silentIndicator.Visible = featureState.silentAim
 end)
 
 -- Get Closest Target
@@ -490,4 +485,4 @@ RunService.Heartbeat:Connect(function()
     if not char then return end
     local tool = char:FindFirstChildOfClass("Tool")
     if tool and tick() - lastAttack >= (1 / featureState.attackSpeed) then
-        VirtualUser:Button1Down(Vector
+        VirtualU
